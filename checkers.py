@@ -1,14 +1,28 @@
-from engine import Table, checkForEndOfTheGame  # Work in progress on refactoring
+from engine import Table, checkForEndOfTheGame
 from display import drawWindow, SQUARESIZE, messageDisplay
 import pygame
 
 FPS = 60
-WIDTH = 67 * 8
-HEIGHT = 67 * 9
+WIDTH = SQUARESIZE * 8
+HEIGHT = SQUARESIZE * 9
+WINSOUNDPATH = "SoundEffects/391539__mativve__electro-win-sound.wav"
+CORRECTCLICKSOUNDPATH = "SoundEffects/121195__gusgus26__hit-plastic-box.wav"
+INCORRECTCLICKSOUNDPATH = (
+    "SoundEffects/528956__beetlemuse__wrong-answer-incorrect-error.wav"
+)
+BACKGROUNDMUSICPATH = "Music/bensound-creativeminds.mp3"
 
+if __name__ == "__main__":
 
-def main():
     pygame.init()
+
+    pygame.mixer.init()
+    pygame.mixer.music.load(BACKGROUNDMUSICPATH)
+    pygame.mixer.music.play(-1)
+    WinSound = pygame.mixer.Sound(WINSOUNDPATH)
+    CorrectClick = pygame.mixer.Sound(CORRECTCLICKSOUNDPATH)
+    InCorrectClick = pygame.mixer.Sound(INCORRECTCLICKSOUNDPATH)
+
     pygame.display.set_caption("Checkers")
     WIN = pygame.display.set_mode((WIDTH, HEIGHT))
     startingTableOfCheckers = [
@@ -35,6 +49,7 @@ def main():
                 run = False
                 break
             if checkForEndOfTheGame(workingOnTableOfCheckers):
+                WinSound.play()
                 run = False
                 break
             drawWindow(workingOnTableOfCheckers, WIN, validMoves=validMoves)
@@ -54,11 +69,13 @@ def main():
                         workingOnTableOfCheckers._table[x][y].lower() == "b"
                         and turn == "Black"
                     ):
+                        CorrectClick.play()
                         validMoves = workingOnTableOfCheckers.findValidMovesForPiece(
                             [x, y]
                         )
                         drawWindow(workingOnTableOfCheckers, WIN, validMoves)
                     else:
+                        InCorrectClick.play()
                         messageDisplay(
                             "Wrong click! try again",
                             30,
@@ -74,6 +91,7 @@ def main():
                         if moves[0] == x and moves[1] == y:
                             goodMove = True
                     if goodMove:
+                        CorrectClick.play()
                         rawTableWithPosOfPieces = workingOnTableOfCheckers.playMove(
                             previousMoves, [x, y]
                         )
@@ -85,6 +103,7 @@ def main():
                         previousMoves = None
                         validMoves = None
                     else:
+                        InCorrectClick.play()
                         messageDisplay(
                             "Wrong click! try again",
                             30,
@@ -93,8 +112,5 @@ def main():
                             (0, 0, 0),
                             WIN,
                         )
+    pygame.mixer.music.stop()
     pygame.quit()
-
-
-if __name__ == "__main__":
-    main()

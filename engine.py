@@ -7,16 +7,10 @@ class Table(object):
         self._nextMoves = None
         self._whiteToMove = white_to_move
 
-    def getWhiteMoves(self):
-        return self._whiteToMove
-
     def getNextMoves(self):
         if self._nextMoves is None:
             self.generateNextMoves()
         return self._nextMoves
-
-    def getTable(self):
-        return self._table
 
     def countOfPieces(self):
         numWhite = 0
@@ -28,15 +22,6 @@ class Table(object):
                 if self._table[i][j].lower() == "w":
                     numWhite += 1
         return numWhite, numBlack
-
-    def findMovesToPlay(self, previous):
-        move = []
-        for i in range(len(self._table)):
-            for j in range(len(self._table[i])):
-                if self._table[i][j] != previous[i][j]:
-                    move.append((i, j))
-
-        return move
 
     def generateNextMoves(self):
         self._nextMoves = []

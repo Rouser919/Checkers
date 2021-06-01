@@ -7,10 +7,8 @@ colors = {
     "MUSTARD": (205, 133, 63),
     "PACIFIC": (1, 128, 181),
     "BRIGHT_PACIFIC": (75, 198, 213),
-    "BLACK": (19, 27, 29),
     "CHERRY": (165, 30, 44),
     "NIGHT_OF_NAVY": (33, 64, 95),
-    "GREEN": (197, 244, 66),
 }
 
 SQUARESIZE = 67
