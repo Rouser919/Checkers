@@ -1,16 +1,11 @@
 from copy import deepcopy
+from display import messageDisplay
+from consts import HEIGHT
 
 
 class Table(object):
-    def __init__(self, table, white_to_move=True):
+    def __init__(self, table):
         self._table = table
-        self._nextMoves = None
-        self._whiteToMove = white_to_move
-
-    def getNextMoves(self):
-        if self._nextMoves is None:
-            self.generateNextMoves()
-        return self._nextMoves
 
     def countOfPieces(self):
         numWhite = 0
@@ -23,40 +18,41 @@ class Table(object):
                     numWhite += 1
         return numWhite, numBlack
 
-    def generateNextMoves(self):
-        self._nextMoves = []
+    def generateNextMoves(self, turn):
         captures = []
-        all_moves = []
+        allMoves = []
+        nextMoves = None
 
         for i in range(len(self._table)):
             for j in range(len(self._table[i])):
-                if self._whiteToMove:
+                if turn == "White":
                     if self._table[i][j].lower() == "b":
                         validMoves = self.findValidMovesForPiece((i, j))
                         for move in validMoves:
                             if move[0] - i == 2 or move[0] - i == -2:
-                                new_table = self.generateNewState((i, j), move)
-                                position = Table(new_table, not self._whiteToMove)
+                                newTable = self.generateNewState((i, j), move)
+                                position = Table(newTable)
                                 captures.append(position)
                             else:
-                                new_table = self.generateNewState((i, j), move)
-                                position = Table(new_table, not self._whiteToMove)
-                                all_moves.append(position)
+                                newTable = self.generateNewState((i, j), move)
+                                position = Table(newTable)
+                                allMoves.append(position)
 
                 else:
                     if self._table[i][j].lower() == "w":
                         validMoves = self.findValidMovesForPiece((i, j))
                         for move in validMoves:
                             if move[0] - i == 2 or move[0] - i == -2:
-                                new_table = self.generateNewState((i, j), move)
-                                position = Table(new_table, not self._whiteToMove)
+                                newTable = self.generateNewState((i, j), move)
+                                position = Table(newTable)
                                 captures.append(position)
                             else:
-                                new_table = self.generateNewState((i, j), move)
-                                position = Table(new_table, not self._whiteToMove)
-                                all_moves.append(position)
-        else:
-            self._nextMoves = captures + all_moves
+                                newTable = self.generateNewState((i, j), move)
+                                position = Table(newTable)
+                                allMoves.append(position)
+        nextMoves = captures + allMoves
+
+        return nextMoves
 
     def generateNewState(self, actualPositionForPiece, newPositionForPiece):
         coppiedTable = deepcopy(self._table)
@@ -164,20 +160,48 @@ class Table(object):
         return captures + validMoves
 
 
-def checkForEndOfTheGame(workingOnTableOfCheckers):
-    posibleMoves = workingOnTableOfCheckers.getNextMoves()
+def checkForEndOfTheGame(workingOnTableOfCheckers, turn, WIN):
+    posibleMoves = workingOnTableOfCheckers.generateNextMoves(turn)
 
     numberOfFigures = workingOnTableOfCheckers.countOfPieces()
     if numberOfFigures[0] == 0:
-        print("Black won!")
+        messageDisplay(
+            "Black Won!",
+            30,
+            250,
+            HEIGHT - 40,
+            (0, 0, 0),
+            WIN,
+        )
         return True
     if numberOfFigures[1] == 0:
-        print("White won!")
+        messageDisplay(
+            "White Won!",
+            30,
+            250,
+            HEIGHT - 40,
+            (0, 0, 0),
+            WIN,
+        )
         return True
     if numberOfFigures[0] + numberOfFigures[1] == 2:
-        print("Tie!")
+        messageDisplay(
+            "Tie!",
+            30,
+            250,
+            HEIGHT - 40,
+            (0, 0, 0),
+            WIN,
+        )
         return True
     if not posibleMoves:
-        print("There are no possible moves left! Game is finished!")
+        messageDisplay(
+            "There are no possible moves left! Game is finished!",
+            30,
+            250,
+            HEIGHT - 40,
+            (0, 0, 0),
+            WIN,
+        )
         return True
     return False

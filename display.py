@@ -1,28 +1,14 @@
 import pygame
-
-colors = {
-    "SUMMER_SUN": (255, 196, 56),
-    "BRIGHT_SUMMER_SUN": (255, 228, 196),
-    "EARLY_ESPRESSO": (80, 57, 49),
-    "MUSTARD": (205, 133, 63),
-    "PACIFIC": (1, 128, 181),
-    "BRIGHT_PACIFIC": (75, 198, 213),
-    "CHERRY": (165, 30, 44),
-    "NIGHT_OF_NAVY": (33, 64, 95),
-}
-
-SQUARESIZE = 67
-PIECESIZE = 33
-BOARDSIZE = SQUARESIZE * 8
+from consts import SQUARESIZE, PIECESIZE, COLORS
 
 
 def drawBoardSquares(WIN, validMoves=None):
     for x in range(8):
         for y in range(8):
             if ((x + y) % 2) == 1:
-                colour = colors["EARLY_ESPRESSO"]
+                colour = COLORS["EARLY_ESPRESSO"]
             else:
-                colour = colors["MUSTARD"]
+                colour = COLORS["MUSTARD"]
             pygame.draw.rect(
                 WIN,
                 colour,
@@ -34,7 +20,7 @@ def drawBoardSquares(WIN, validMoves=None):
                 ),
             )
     if validMoves is not None:
-        colour = colors["NIGHT_OF_NAVY"]
+        colour = COLORS["NIGHT_OF_NAVY"]
         for moves in validMoves:
             pygame.draw.rect(
                 WIN,
@@ -61,7 +47,7 @@ def messageDisplay(text, text_size, text_orientation_w, text_orientation_h, colo
 
 
 def drawWindow(tableOfCheckers, WIN, validMoves=None):
-    WIN.fill(colors["CHERRY"])
+    WIN.fill(COLORS["CHERRY"])
     drawBoardSquares(WIN, validMoves=validMoves)
     drawPieceCircles(tableOfCheckers, WIN)
     pygame.display.update()
@@ -72,7 +58,7 @@ def drawPieceCircles(tableOfCheckers, WIN):
         for y in range(8):
             if tableOfCheckers._table[x][y] != ".":
                 if tableOfCheckers._table[x][y].lower() == "b":
-                    colour = colors["SUMMER_SUN"]
+                    colour = COLORS["SUMMER_SUN"]
                     pygame.draw.circle(
                         WIN,
                         colour,
@@ -87,11 +73,11 @@ def drawPieceCircles(tableOfCheckers, WIN):
                         30,
                         x * SQUARESIZE + PIECESIZE,
                         y * SQUARESIZE + PIECESIZE,
-                        colors["BRIGHT_SUMMER_SUN"],
+                        COLORS["BRIGHT_SUMMER_SUN"],
                         WIN,
                     )
                 elif tableOfCheckers._table[x][y].lower() == "w":
-                    colour = colors["PACIFIC"]
+                    colour = COLORS["PACIFIC"]
                     pygame.draw.circle(
                         WIN,
                         colour,
@@ -106,6 +92,6 @@ def drawPieceCircles(tableOfCheckers, WIN):
                         30,
                         x * SQUARESIZE + PIECESIZE,
                         y * SQUARESIZE + PIECESIZE,
-                        colors["BRIGHT_PACIFIC"],
+                        COLORS["BRIGHT_PACIFIC"],
                         WIN,
                     )

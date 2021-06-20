@@ -1,16 +1,9 @@
 from engine import Table, checkForEndOfTheGame
 from display import drawWindow, SQUARESIZE, messageDisplay
+from time import sleep
 import pygame
+from consts import *
 
-FPS = 60
-WIDTH = SQUARESIZE * 8
-HEIGHT = SQUARESIZE * 9
-WINSOUNDPATH = "SoundEffects/391539__mativve__electro-win-sound.wav"
-CORRECTCLICKSOUNDPATH = "SoundEffects/121195__gusgus26__hit-plastic-box.wav"
-INCORRECTCLICKSOUNDPATH = (
-    "SoundEffects/528956__beetlemuse__wrong-answer-incorrect-error.wav"
-)
-BACKGROUNDMUSICPATH = "Music/bensound-creativeminds.mp3"
 
 if __name__ == "__main__":
 
@@ -36,7 +29,7 @@ if __name__ == "__main__":
         ["b", ".", "b", ".", "b", ".", "b", "."],
     ]
 
-    workingOnTableOfCheckers = Table(startingTableOfCheckers, True)
+    workingOnTableOfCheckers = Table(startingTableOfCheckers)
     clock = pygame.time.Clock()
     run = True
     validMoves = None
@@ -48,8 +41,10 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 run = False
                 break
-            if checkForEndOfTheGame(workingOnTableOfCheckers):
+            if checkForEndOfTheGame(workingOnTableOfCheckers, turn, WIN):
                 WinSound.play()
+                drawWindow(workingOnTableOfCheckers, WIN, validMoves=validMoves)
+                sleep(5)
                 run = False
                 break
             drawWindow(workingOnTableOfCheckers, WIN, validMoves=validMoves)
