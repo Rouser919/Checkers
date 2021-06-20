@@ -41,9 +41,9 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 run = False
                 break
-            if checkForEndOfTheGame(workingOnTableOfCheckers, turn, WIN):
+            if checkForEndOfTheGame(workingOnTableOfCheckers, WIN):
                 WinSound.play()
-                drawWindow(workingOnTableOfCheckers, WIN, validMoves=validMoves)
+                pygame.display.update()
                 sleep(5)
                 run = False
                 break
@@ -107,5 +107,6 @@ if __name__ == "__main__":
                             (0, 0, 0),
                             WIN,
                         )
+                        pygame.display.update()
     pygame.mixer.music.stop()
     pygame.quit()

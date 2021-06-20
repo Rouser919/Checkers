@@ -18,42 +18,6 @@ class Table(object):
                     numWhite += 1
         return numWhite, numBlack
 
-    def generateNextMoves(self, turn):
-        captures = []
-        allMoves = []
-        nextMoves = None
-
-        for i in range(len(self._table)):
-            for j in range(len(self._table[i])):
-                if turn == "White":
-                    if self._table[i][j].lower() == "b":
-                        validMoves = self.findValidMovesForPiece((i, j))
-                        for move in validMoves:
-                            if move[0] - i == 2 or move[0] - i == -2:
-                                newTable = self.generateNewState((i, j), move)
-                                position = Table(newTable)
-                                captures.append(position)
-                            else:
-                                newTable = self.generateNewState((i, j), move)
-                                position = Table(newTable)
-                                allMoves.append(position)
-
-                else:
-                    if self._table[i][j].lower() == "w":
-                        validMoves = self.findValidMovesForPiece((i, j))
-                        for move in validMoves:
-                            if move[0] - i == 2 or move[0] - i == -2:
-                                newTable = self.generateNewState((i, j), move)
-                                position = Table(newTable)
-                                captures.append(position)
-                            else:
-                                newTable = self.generateNewState((i, j), move)
-                                position = Table(newTable)
-                                allMoves.append(position)
-        nextMoves = captures + allMoves
-
-        return nextMoves
-
     def generateNewState(self, actualPositionForPiece, newPositionForPiece):
         coppiedTable = deepcopy(self._table)
         typeOfFigure = coppiedTable[actualPositionForPiece[0]][
@@ -160,8 +124,7 @@ class Table(object):
         return captures + validMoves
 
 
-def checkForEndOfTheGame(workingOnTableOfCheckers, turn, WIN):
-    posibleMoves = workingOnTableOfCheckers.generateNextMoves(turn)
+def checkForEndOfTheGame(workingOnTableOfCheckers, WIN):
 
     numberOfFigures = workingOnTableOfCheckers.countOfPieces()
     if numberOfFigures[0] == 0:
@@ -194,14 +157,5 @@ def checkForEndOfTheGame(workingOnTableOfCheckers, turn, WIN):
             WIN,
         )
         return True
-    if not posibleMoves:
-        messageDisplay(
-            "There are no possible moves left! Game is finished!",
-            30,
-            250,
-            HEIGHT - 40,
-            (0, 0, 0),
-            WIN,
-        )
-        return True
+
     return False
